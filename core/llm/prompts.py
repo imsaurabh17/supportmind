@@ -36,7 +36,7 @@ def build_qa_prompt() -> ChatPromptTemplate:
     """Build the main QA prompt template with tone + context injection."""
     return ChatPromptTemplate.from_messages([
         SystemMessagePromptTemplate.from_template(SYSTEM_TEMPLATE),
-        HumanMessagePromptTemplate.from_template('{question}'),
+        HumanMessagePromptTemplate.from_template('{input}'),
     ])
 
 CONDENSE_TEMPLATE = """Given the following conversation history and a follow-up question,
@@ -45,7 +45,7 @@ rephrase the follow-up question to be a standalone question.
 Chat History:
 {chat_history}
 
-Follow Up Question: {question}
+Follow Up Question: {input}
 Standalone question:"""
 
 def build_condense_prompt() -> ChatPromptTemplate:
