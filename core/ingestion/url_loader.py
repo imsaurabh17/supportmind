@@ -171,6 +171,7 @@ def _is_blocked(docs: List[Document]) -> bool:
         "checking your browser",
     ]
     return any(signal in content for signal in block_signal)
+
 def _is_shallow_content(docs: List[Document]) -> bool:
     """Detect if static load got real content or just a JS shell."""
     if not docs:
