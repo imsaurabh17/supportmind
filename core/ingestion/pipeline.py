@@ -77,4 +77,3 @@ def ingest(
 
     logger.info(f"Ingestion complete: {result}")
     return result
-
