@@ -2,12 +2,11 @@ from langchain_core.prompts import (
     ChatPromptTemplate,
     SystemMessagePromptTemplate,
     HumanMessagePromptTemplate,
-    MessagesPlaceholder,
 )
 
 TONE_INSTRUCTIONS = {
     'frustrated' : (
-        'The user seems frustrated or upset. Respnd with extra empathy.'
+        'The user seems frustrated or upset. Respond with extra empathy.'
         'start with acknowledgment (e.g., "I completely understand your frustration.").'
         'Be step-by-step and thorogh. Do not be dismissive.'
     ),
@@ -37,6 +36,18 @@ def build_qa_prompt() -> ChatPromptTemplate:
     """Build the main QA prompt template with tone + context injection."""
     return ChatPromptTemplate.from_messages([
         SystemMessagePromptTemplate.from_template(SYSTEM_TEMPLATE),
-        MessagesPlaceholder(variable_name='chat_history'),
         HumanMessagePromptTemplate.from_template('{question}'),
     ])
+
+CONDENSE_TEMPLATE = """Given the following conversation history and a follow-up question,
+rephrase the follow-up question to be a standalone question.
+
+Chat History:
+{chat_history}
+
+Follow Up Question: {question}
+Standalone question:"""
+
+def build_condense_prompt() -> ChatPromptTemplate:
+    """Condense prompt - handles chat history as plain text, no type issues."""
+    return ChatPromptTemplate.from_template(CONDENSE_TEMPLATE)
