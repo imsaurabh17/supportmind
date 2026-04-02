@@ -42,17 +42,15 @@ def build_chain(collection_name: str = 'supportmind_docs') -> Runnable:
         get_llm(), retriever, build_condense_prompt()
     )
 
-    # Handles document-grounded answer generation
-    document_chain = create_stuff_documents_chain(get_llm(), build_qa_prompt())
-
-    rag_chain = create_retrieval_chain(history_aware_retriever, document_chain)
-
-    logger.info('RAG chain built successfully')
-    return rag_chain
+    logger.info('RAG chain components built successfully')
+    return {
+        'llm': get_llm(),
+        'history_aware_retriever': history_aware_retriever,
+    }
 
 
 def ask(
-        chain: Runnable,
+        chain_component: Dict,
         question: str,
         chat_history: List = None,
 ) -> Dict[str, Any]:
@@ -81,11 +79,21 @@ def ask(
         history_messages.append(HumanMessage(content=human_msg))
         history_messages.append(AIMessage(content=ai_msg))
 
+    # Rebuild document chain with correct tone for this specific message
+    tone = TONE_INSTRUCTIONS[sentiment]
+    document_chain = create_stuff_documents_chain(
+        chain_component['llm'],
+        build_qa_prompt(tone_instruction=tone)
+    )
+    rag_chain = create_retrieval_chain(
+        chain_component['history_aware_retriever'],
+        document_chain
+    )
+
     # Step 3: invoke — tone_instruction is a standard variable, not prompt surgery
-    result = chain.invoke({
+    result = rag_chain.invoke({
         'input': question,
         'chat_history': history_messages,
-        'tone_instruction': TONE_INSTRUCTIONS[sentiment],
     })
 
     # Step 4: format citations from retrieved context docs
