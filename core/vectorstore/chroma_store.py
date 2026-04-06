@@ -81,6 +81,17 @@ def get_collection_count(collection_name: str = DEFAULT_COLLECTION) -> int:
     store = get_vectorstore(collection_name)
     return store._collection.count()
 
+def list_collections() -> List[str]:
+    """Return names of all existing ChromaDB collections.
+    
+    Returns:
+        List of collection name strings. Empty list if none exist.
+    """
+    import chromadb
+    client = chromadb
+    client = chromadb.Persistentclient(path=CHROMA_PATH)
+    return [col.name for col in client.list_collections()]
+
 if __name__=="__main__":
     import sys
     from pathlib import Path
