@@ -77,3 +77,19 @@ def ingest(
 
     logger.info(f"Ingestion complete: {result}")
     return result
+
+def run_pipeline(
+        pdf_paths: List[str] = None,
+        urls: List[str] = None,
+        collection_name: str = "supportmind_docs",
+) -> Dict[str, Any]:
+    """Alias for ingest() with pdf_paths parameter name.
+    
+    Used by the streamlit sidebar component.
+    """
+
+    return ingest(
+        file_paths=pdf_paths,
+        urls=urls,
+        collection_name=collection_name,
+    )
