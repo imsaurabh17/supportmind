@@ -89,7 +89,7 @@ def list_collections() -> List[str]:
     """
     import chromadb
     client = chromadb
-    client = chromadb.Persistentclient(path=CHROMA_PATH)
+    client = chromadb.PersistentClient(path=CHROMA_PATH)
     return [col.name for col in client.list_collections()]
 
 if __name__=="__main__":
