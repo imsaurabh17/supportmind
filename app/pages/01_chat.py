@@ -75,7 +75,7 @@ for msg in st.session_state.messages:
                 unsafe_allow_html=True,
             )
 
-        if msg["role"] == "assitant" and msg.get("citations"):
+        if msg["role"] == "assistant" and msg.get("citations"):
             citation_text = "  |  ".join(
                 f"📎 {c['source']}, Page {c['page']}"
                 for c in msg["citations"]
@@ -93,7 +93,14 @@ if prompt := st.chat_input("Ask a question about your documents..."):
 
     with st.chat_message("assistant"):
         with st.spinner("Thinking..."):
-            result = ask(st.session_state.chain, prompt)
+            chat_history = []
+            for i in range(0, len(st.session_state.messages)-1,2):
+                human = st.session_state.messages[i]["content"]
+                if i+1 < len(st.session_state.messages):
+                    ai = st.session_state.messages[i+1]["content"]
+                    chat_history.append((human, ai))
+
+            result = ask(st.session_state.chain, prompt,chat_history=chat_history)
 
         answer = result["answer"]
         sentiment = result["sentiment"]
