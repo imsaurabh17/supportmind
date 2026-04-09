@@ -1,15 +1,20 @@
 import logging
 from typing import Literal
-from transformers import pipeline
+from typing import lru_cache
+
 
 logger = logging.getLogger(__name__)
 
 sentimentType = Literal['frustrated', 'neutral', 'happy']
 
-classifier = pipeline(
-    "sentiment-analysis",
-    model="distilbert-base-uncased-finetuned-sst-2-english"
-)
+@lru_cache(maxsize=1)
+def _get_classifier():
+    """Load sentiment model once, lazily, on first use."""
+    from transformers import pipeline
+    return pipeline(
+        "sentiment-analysis",
+        model="distilbert-base-uncased-finetuned-sst-2-english"
+    )
 
 def detect_sentiment(text: str) -> sentimentType:
     """Classify user sentiment from message text.
@@ -25,6 +30,7 @@ def detect_sentiment(text: str) -> sentimentType:
     Returns:
         Sentiment label as string literal.
     """
+    classifier = _get_classifier()
     result = classifier(text)[0]
 
     label = result['label']
