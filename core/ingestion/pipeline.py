@@ -4,7 +4,6 @@ from typing import List, Dict, Any
 from core.ingestion.pdf_loader import load_pdf
 from core.ingestion.url_loader import load_url
 from core.ingestion.chunker import chunk_documents
-from core.embeddings.embedder import get_embeddings
 from core.vectorstore.chroma_store import add_document
 
 logger = logging.getLogger(__name__)
