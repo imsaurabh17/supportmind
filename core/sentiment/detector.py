@@ -1,6 +1,6 @@
 import logging
 from typing import Literal
-from typing import lru_cache
+from functools import lru_cache
 
 
 logger = logging.getLogger(__name__)
