@@ -1,18 +1,19 @@
 streamlit==1.32.0
 
-langchain==0.2.17
+langchain==1.0.3
+langchain-core==1.0.3
+langchain-classic==1.0.3
 langchain-community==0.2.19
 
-langchain-groq==0.1.10
-langchain-huggingface==0.0.3
-langchain-chroma==0.1.2
+langchain-chroma==1.1.0
+chromadb==0.5.5
 
-chromadb==0.4.24
+langchain-groq
+langchain-huggingface
 
-sentence-transformers==2.7.0
-transformers==4.41.2
-
-torch==2.2.2
+sentence-transformers
+transformers
+torch
 
 python-dotenv
 textblob
