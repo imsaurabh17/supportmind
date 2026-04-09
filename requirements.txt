@@ -10,3 +10,7 @@ python-dotenv
 textblob
 pypdf
 protobuf==3.20.3
+torch
+torchvision
+sentence-transformers
+transformers
