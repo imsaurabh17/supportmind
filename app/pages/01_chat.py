@@ -97,12 +97,13 @@ if prompt := st.chat_input("Ask a question about your documents..."):
     with st.chat_message("assistant"):
         with st.spinner("Thinking..."):
             chat_history = []
+            history = st.session_state.messages[:-1]
             for i in range(0, len(st.session_state.messages)-1,2):
-                human = st.session_state.messages[i]["content"]
-                if i+1 < len(st.session_state.messages):
-                    ai = st.session_state.messages[i+1]["content"]
-                    chat_history.append((human, ai))
-
+                if history[i]["role"] == "user" and history[i+1]["role"]=="assistant":
+                    chat_history.append((
+                        history[i]["content"],
+                        history[i+1]["content"]
+                    ))
             result = ask(st.session_state.chain, prompt,chat_history=chat_history)
 
         answer = result["answer"]
