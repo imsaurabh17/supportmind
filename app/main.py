@@ -1,8 +1,10 @@
 import sys
+import os
+
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 import logging
-import os
 from pathlib import Path
 import streamlit as st
 from dotenv import load_dotenv
