@@ -88,7 +88,6 @@ def list_collections() -> List[str]:
         List of collection name strings. Empty list if none exist.
     """
     import chromadb
-    client = chromadb
     client = chromadb.PersistentClient(path=CHROMA_PATH)
     return [col.name for col in client.list_collections()]
 
