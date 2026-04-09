@@ -42,7 +42,7 @@ if 'chain' not in st.session_state:
     st.session_state.chain = None
 
 if 'messages' not in st.session_state:
-    st.session_state.messaages = []
+    st.session_state.messages = []
 
 if 'collection_name' not in st.session_state:
     st.session_state.collection_name = 'supportmind_docs'
