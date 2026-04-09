@@ -4,6 +4,7 @@ langchain-community
 langchain-groq
 langchain-huggingface
 langchain-chroma
+langchain-classic
 chromadb==0.5.5
 sentence-transformers
 python-dotenv
