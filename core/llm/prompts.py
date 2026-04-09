@@ -19,9 +19,13 @@ TONE_INSTRUCTIONS = {
 }
 
 SYSTEM_TEMPLATE = """You are SupportMind, an AI customer support agent.
-Use ONLY the context provided below to answer questions.
-If the answer is not in the context, say: 'I don't have that information in my \
-knowledge base. Please contact support directly.'
+
+Use the context provided below to answer questions about policies and documents.
+You may also use information shared by the user during the conversation
+(such as their name or situation) to personalize and contextualize your responses.
+
+If the answer is not found in the context or conversation, say:
+'I don't have that information in my knowledge base. Please contact support directly.'
 
 TONE INSTRUCTION: {tone_instruction}
 
@@ -35,11 +39,15 @@ document names and page numbers you used. Format: [Source: filename, Page X]
 def build_qa_prompt(tone_instruction: str = "") -> ChatPromptTemplate:
     """Build the main QA prompt template with tone + context injection."""
     system = f"""You are SupportMind, an AI customer support agent.
-    Use ONLY the context provided below to answer questions.
-    If the answer is not in the context, say: 'I don't have that information in my \
-        knowledge base. Please contact support directly.'
-        
-        TONE INSTRUCTION: {tone_instruction}
+
+Use the context provided below to answer questions about policies and documents.
+You may also use information shared by the user during the conversation
+(such as their name or situation) to personalize and contextualize your responses.
+
+If the answer is not found in the context or conversation, say:
+'I don't have that information in my knowledge base. Please contact support directly.'
+
+TONE INSTRUCTION: {tone_instruction}
 
 CONTEXT:
 {{context}}
@@ -51,7 +59,6 @@ document names and page numbers you used. Format: [Source: filename, Page X]
         SystemMessagePromptTemplate.from_template(system),
         HumanMessagePromptTemplate.from_template('{input}'),
     ])
-
 
 CONDENSE_TEMPLATE = """Given the following conversation history and a follow-up question,
 rephrase the follow-up question to be a standalone question.
