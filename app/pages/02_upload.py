@@ -145,7 +145,7 @@ with tab_url:
             status_box = st.empty()
 
             for i, url in enumerate(urls):
-                status_box.makrdown(f"**Fetching:** `{url}`")
+                status_box.markdown(f"**Fetching:** `{url}`")
                 progress_bar.progress(
                     int((i/len(urls))*90),
                     text=f"Processing {url[:60]}...",
