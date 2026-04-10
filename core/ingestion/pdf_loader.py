@@ -41,7 +41,7 @@ def load_pdf(file_path: str) -> List[Document]:
 
     for i, doc in enumerate(documents):
         doc.metadata.update({
-            "source": path.name,
+            "source": path.name.split("_", 1)[-1] if "_" in path.name else path.name,
             "file_path": str(path.absolute()),
             "page": doc.metadata.get("page", i),
             "total_pages": len(documents),
