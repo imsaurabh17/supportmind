@@ -87,7 +87,7 @@ with tab_pdf:
                 try:
                     # Save to temp file - PyPDFLoader needs a real file path
                     with tempfile.NamedTemporaryFile(
-                        delete=False, suffix=".pdf"
+                        delete=False, suffix=f"_{uploaded_file.name}"
                     ) as tmp:
                         tmp.write(uploaded_file.read())
                         tmp_path = tmp.name
