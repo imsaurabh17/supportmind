@@ -2,6 +2,7 @@ from langchain_core.prompts import (
     ChatPromptTemplate,
     SystemMessagePromptTemplate,
     HumanMessagePromptTemplate,
+    MessagesPlaceholder,
 )
 
 TONE_INSTRUCTIONS = {
@@ -57,6 +58,7 @@ document names and page numbers you used. Format: [Source: filename, Page X]
 """
     return ChatPromptTemplate.from_messages([
         SystemMessagePromptTemplate.from_template(system),
+        MessagesPlaceholder(variable_name="chat_history"),
         HumanMessagePromptTemplate.from_template('{input}'),
     ])
 
