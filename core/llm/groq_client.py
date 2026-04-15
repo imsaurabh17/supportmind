@@ -16,7 +16,7 @@ def get_llm() -> ChatGroq:
     if not api_key:
         raise EnvironmentError("Groq api key not found in environment variables")
     
-    logger.info("Initializing Groq LLM: llama-3.3-70b-versatile")
+    logger.info("Initializing Groq LLM: llama-3.1-8b-instant")
     return ChatGroq(
         model='llama-3.3-70b-versatile',
         api_key=api_key,
