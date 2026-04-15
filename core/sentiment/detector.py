@@ -33,14 +33,11 @@ def detect_sentiment(text: str) -> sentimentType:
     classifier = _get_classifier()
     result = classifier(text)[0]
 
-    label = result['label']
-
-    if label == "NEGATIVE":
-        return 'frustrated'
-    elif label == "POSITIVE":
-        return 'happy'
-    else:
+    if result['score'] < 0.75:
         return 'neutral'
+    if result['label'] == "NEGATIVE":
+        return 'frustrated'
+    return 'happy'
 
 SENTIMENT_EMOJI = {
     'frustrated': '😤',
