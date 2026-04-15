@@ -3,13 +3,19 @@
 # Usage: python scripts/run_evaluation.py
 # OR import and call run_evaluation() from anywhere
 
+import os
+import time
 import json
 import logging
 from datetime import datetime
 from pathlib import Path
 from typing import Dict
+from langchain_community.embeddings import HuggingFaceEmbeddings
 from datasets import Dataset
 from ragas import evaluate
+from ragas.llms import LangchainLLMWrapper
+from langchain_groq import ChatGroq
+from ragas.run_config import RunConfig
 from ragas.metrics import (
     faithfulness,
     answer_relevancy,
@@ -65,6 +71,8 @@ def run_evaluation(collection_name: str = "supportmind_docs") -> Dict:
             # Skip failed questions rather than the full eval
             continue
 
+        time.sleep(3)
+
     if not questions:
         raise RuntimeError("All evaluation questions failed. Check your RAG chain.")
     
@@ -79,21 +87,40 @@ def run_evaluation(collection_name: str = "supportmind_docs") -> Dict:
     )
 
     logger.info("Running RAGAS scoring (this may take 2-5 minutes)...")
+
+    llm = LangchainLLMWrapper(
+        ChatGroq(
+            model="llama-3.3-70b-versatile",
+            groq_api_key=os.getenv("GROQ_API_KEY")
+        )
+    )
+
+    embeddings = HuggingFaceEmbeddings(
+        model_name = "sentence-transformers/all-MiniLM-L6-v2"
+    )
+
     scores = evaluate(
         dataset,
+        llm=llm,
+        embeddings=embeddings,
         metrics = [
             faithfulness,
             answer_relevancy,
             context_precision,
         ],
+        run_config=RunConfig(
+            max_workers=1,
+            timeout=120,
+            max_retries=5,
+        )
     )
 
     # Average scores across all samples
     result_dict = scores.to_pandas().mean(numeric_only=True).to_dict()
 
     output = {
-        "faithfulness": round(result_dict.get("faiithfulness", 0.0), 4),
-        "answer_relavancy": round(result_dict.get("answer_relavancy", 0.0), 4),
+        "faithfulness": round(result_dict.get("faithfulness", 0.0), 4),
+        "answer_relevancy": round(result_dict.get("answer_relevancy", 0.0), 4),
         "context_precision": round(result_dict.get("context_precision", 0.0), 4),
         "n_samples": len(questions),
         "collection": collection_name,
